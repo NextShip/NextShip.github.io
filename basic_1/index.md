@@ -2,6 +2,17 @@
 
 <span class="muted">クッキングタイム: 5分 (作業時間) / 15-30分 (待ち時間)</span>
 
+## 追記
+## Rails Girls修正ポイント
+```
+gem 'sqlite3','~> 1.3.13'
+gem 'bootsnap', '~> 1.1.0'
+```
+
+## ImageMagickのダウンロード
+ダウンロードするimagemagickはこれ
+https://legacy.imagemagick.org/script/download.php#windows
+
 Ruby on Rails上にアプリケーションを作るためには、
 あなたのコンピュータに必要なソフトウェアと開発環境をセットアップする必要があります。
 
@@ -106,7 +117,7 @@ Mac OS X 10.7 およびそれ以前のバージョンでは、 Atom エディタ
 以下のコマンドでRailsが正しくインストールされているか確認してください。
 
 ```
-rails new sample
+rails new sample -B
 cd sample
 rails g scaffold book
 rails db:migrate
@@ -269,7 +280,7 @@ Make sure it is displaying version number.
 Check that everything is working by running the application generator command.
 
 ```
-rails new myapp
+rails new myapp -B
 ```
 
 ```
