@@ -3,7 +3,7 @@
 <span class="muted">クッキングタイム: 5分 (作業時間) / 15-30分 (待ち時間)</span>
 
 ## 追記
-## Rails Girls修正ポイント
+## インストール時修正ポイント
 ```
 gem 'sqlite3','~> 1.3.13'
 gem 'bootsnap', '~> 1.1.0'
