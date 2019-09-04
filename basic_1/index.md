@@ -1,0 +1,700 @@
+# Rails Girls インストール・レシピ
+
+<span class="muted">クッキングタイム: 5分 (作業時間) / 15-30分 (待ち時間)</span>
+
+Ruby on Rails上にアプリケーションを作るためには、
+あなたのコンピュータに必要なソフトウェアと開発環境をセットアップする必要があります。
+
+あなたのオペレーティングシステムの説明をご覧ください。
+もし、なにか問題が発生してもあわてずにコーチに声をかけてください。
+コーチと一緒に問題を解決しましょう。
+
+* [macOS 用セットアップ](#setup_for_macos)
+* [Windows 用セットアップ](#setup_for_windows)
+* [Windows 用セットアップ（WSLが使えない方向け）](#setup_for_windows_without_wsl)
+* [Linux 用セットアップ](#setup_for_linux)
+* [Alternative Installment for all OS](#virtual-machine)
+* [クラウドサービスを利用する](#using-a-cloud-service)
+
+*コーチの方へ*:
+インストール中に問題が発生した場合、この [Troubleshooting](https://github.com/railsgirls-jp/railsgirls-jp.github.io/wiki/Troubleshooting)  のページを参考にして下さい。
+
+<hr />
+
+## <a id="setup_for_macos">macOS 用セットアップ</a>
+
+### *1.* オペレーティング・システムのバージョンを調べましょう。
+
+Appleメニューをクリックして *About This Mac* (図 1) を選びます。
+
+![Apple menu](/images/apple_menu.png "Apple menu")
+
+図 1
+
+### *2.* 開いたウィンドウに使用しているオペレーティング・システムのバージョンが表示されます。(図 2)。
+
+バージョン番号が 10.`n` （`n` は 6 から 14の間）で始まっていたら、このドキュメントに従って進めます。
+これ以外のバージョンだったら、イベントでコーチと一緒にセットアップします。
+
+![About this Mac dialog](/images/about_this_mac.png "About this Mac dialog")
+
+図 2
+
+### *3.* rbenv を使って Ruby と Ruby on Rails をインストール(Mac OS X 10.9 以上の場合):
+
+Mac OS X 10.9 以上の場合は、Homebrew と rbenv を使って環境をつくります。
+
+#### 3-1. Command line tools をターミナルからインストール:
+
+{% highlight sh %}
+xcode-select --install
+{% endhighlight %}
+
+#### 3-2. [Homebrew](http://brew.sh/)をインストール:
+
+{% highlight sh %}
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+{% endhighlight %}
+
+#### 3-3. [rbenv](https://github.com/rbenv/rbenv)をインストール:
+
+{% highlight sh %}
+brew update
+brew install rbenv
+echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
+source ~/.bash_profile
+{% endhighlight %}
+
+#### 3-4. rbenvを使ってRubyをインストール:
+
+"rbenv install -l" コマンドでrbenvでインストール可能なRubyのバージョンを確認できます。
+
+{% highlight sh %}
+rbenv install 2.6.3
+{% endhighlight %}
+
+※もしも "OpenSSL::SSL::SSLError: ... : certificate verify failed" エラーが起きた場合は、以下の手順を試してみてください。
+
+{% highlight sh %}
+brew install curl-ca-bundle
+cp /usr/local/opt/curl-ca-bundle/share/ca-bundle.crt `ruby -ropenssl -e 'puts OpenSSL::X509::DEFAULT_CERT_FILE'`
+{% endhighlight %}
+
+#### 3-5. デフォルトのRuby を設定:
+
+{% highlight sh %}
+rbenv global 2.6.3
+{% endhighlight %}
+
+#### 3-6. Railsのインストール:
+
+{% highlight sh %}
+gem install rails --no-document
+{% endhighlight %}
+
+### *4.* コードを編集するのに必要なテキストエディタをインストールする。
+
+このワークショップでは Atom エディタを推奨しています。
+
+* [Atom エディタをダウンロードしてインストールする](https://atom.io/)
+
+Mac OS X 10.7 およびそれ以前のバージョンでは、 Atom エディタは非対応ですが、 [Sublime Text 2](http://www.sublimetext.com/2) エディタが利用可能です。
+
+### *5.* 動作確認
+
+コーチの方に以下の方法で動作確認をしてもらってください。
+
+*コーチの方へ*:
+
+以下のコマンドでRailsが正しくインストールされているか確認してください。
+
+{% highlight sh %}
+rails new sample
+cd sample
+rails g scaffold book
+rails db:migrate
+rails server
+{% endhighlight %}
+
+ブラウザのURL欄に `http://localhost:3000/books` と入力して、画面が表示されれば成功です。
+
+作ったプロジェクトは削除しておきましょう。
+
+<hr />
+
+## <a id="setup_for_windows">Windows 用セットアップ</a>
+
+### *1.* WSLの導入
+
+*※ここから先の方法を実行するにはWindowsのパスワードが必要になります。事前に確認をしておいてください。*
+
+*※WSLでのペーストは右クリックで行います。*
+
+画面左下のWindowsボタンを押し、出てきた歯車ボタンを押して「設定」アプリケーションを開きます。
+
+![WSL install setting](/images/windows_install/wsl_install_setting1.png "wsl install setting")
+
+設定アプリケーションの検索窓に「Windows の機能の有効化または無効化」と入力します。（最後まで入力しなくてもOKです）
+
+![WSL install setting](/images/windows_install/wsl_install_setting2.png "wsl install setting")
+
+
+以下の画面が表示されたら、「Windows Subsystem for Linux」にチェックを入れ、マシンを再起動します。
+
+![WSL install select wsl](/images/windows_install/wsl_install_select_wsl.png "wsl install select wsl")
+
+続けて「Microsoft Store」を開きます。
+
+![WSL install open store](/images/windows_install/wsl_install_open_store.png "wsl install open store")
+
+
+検索窓に「Ubuntu」と入力して「Ubuntu」アプリケーションをインストールします（「Ubuntu 18.04 LTS」ではなく、「Ubuntu」をインストールするようにしてください）。
+
+![WSL install select ubuntu](/images/windows_install/wsl_install_select_ubuntu.png "wsl install select ubuntu")
+
+以下の画面が表示されるので、 '入手'ボタン、'起動'ボタンをクリックします。
+
+![WSL install get ubuntu](/images/windows_install/wsl_install_get_ubuntu.png "wsl install get ubuntu")
+![WSL install start ubuntu](/images/windows_install/wsl_install_start_ubuntu.png "wsl install start ubuntu")
+
+「Ubuntu」アプリケーションが起動すればWSLのインストールは成功です。
+
+起動したアプリケーション（ここからは*Bashウィンドウ*と呼びます）にはユーザー名とパスワードの入力を促す画面が表示されていますので、適当なユーザー名（半角英数小文字のみ）とパスワードを入力しましょう（パスワードは2回入力する必要があり、画面には表示されませんが正しく入力されています）。
+
+![WSL install Bash Window](/images/windows_install/wsl_install_bash_window.png "wsl install bash window")
+
+### *2.* Rubyのインストール
+
+以下のセクションでは、`apt`などのソフトウェアを使ってRubyの環境を構築していきます。
+
+#### 2-1 必要なソフトウェアのインストール
+
+Bashウィンドウで以下のコマンドを実行してください。
+
+なお、最初のコマンドを実行する際にパスワードの入力を求められますが、先程Bashウィンドウに入力したパスワードを入力してください(Windowsのパスワードではないので注意してください)。
+
+{% highlight sh %}
+sudo apt update
+sudo apt upgrade -y
+sudo apt install autoconf bison build-essential libssl-dev libyaml-dev libreadline-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev sqlite3 libsqlite3-dev nodejs -y
+{% endhighlight %}
+
+#### 2-2 rbenvのインストール
+
+Bashウィンドウで以下のコマンドを実行してください。
+
+{% highlight sh %}
+git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+source ~/.bashrc
+{% endhighlight %}
+
+#### 2-3 ruby-buildのインストール
+
+Bashウィンドウで以下のコマンドを実行してください。
+
+{% highlight sh %}
+git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
+{% endhighlight %}
+
+#### 2-4 Rubyのインストール
+
+Bashウィンドウで以下のコマンドを実行してください。
+
+{% highlight sh %}
+rbenv install 2.6.3
+rbenv global 2.6.3
+{% endhighlight %}
+
+作業完了後に、以下のコマンドを実行してください。
+
+{% highlight sh %}
+ruby -v
+{% endhighlight %}
+
+以下のように、インストールされたRubyのバージョンが表示されればOKです。
+
+{% highlight sh %}
+ruby 2.6.3p62 (2019-04-16 revision 67580) [x86_64-linux]
+{% endhighlight %}
+
+### *3.* Railsのインストール
+
+Bashウィンドウで以下のコマンドを実行してください。
+
+{% highlight sh %}
+gem install rails --no-document
+{% endhighlight %}
+
+作業完了後に、以下のコマンドを実行してください。
+
+{% highlight sh %}
+rails -v
+{% endhighlight %}
+
+以下のように、インストールされたRailsのバージョンが表示されればOKです（バージョンの番号は違うかもしれません）。
+
+{% highlight sh %}
+Rails 5.2.3
+{% endhighlight %}
+
+<hr />
+
+### *4.* コードを編集するのに必要なテキストエディタをインストールする。
+
+このワークショップでは Atom エディタを推奨しています。
+
+* [Atom エディタをダウンロードしてインストールする](https://atom.io/)
+
+### *5.* 動作確認
+
+コーチの方に以下の方法で動作確認をしてもらってください。
+
+*コーチの方へ*:
+
+以下のコマンドでRailsが正しくインストールされているか確認してください。
+
+{% highlight sh %}
+rails new sample
+cd sample
+rails g scaffold book
+rails db:create
+rails db:migrate
+rails server
+{% endhighlight %}
+
+ブラウザのURL欄に `http://localhost:3000/books` と入力して、画面が表示されれば成功です。
+
+作ったプロジェクトは削除しておきましょう。
+
+## <a id="setup_for_windows_without_wsl">Windows 用セットアップ（WSLが使えない方向け）</a>
+
+### *1.* Rubyのインストール
+
+[RubyInstaller](https://github.com/oneclick/rubyinstaller2/releases/download/RubyInstaller-2.6.3-1/rubyinstaller-devkit-2.6.3-1-x64.exe) をダウンロードして実行します。
+
+
+インストールのオプションは `Use UTF-8 as default external encoding` をチェックし、他の選択肢は全てデフォルトを選択します。
+![RubyInstaller Install options](/images/windows_install/rubyinstaller_install_options.png "rubyinstaller install options")
+
+Rubyのインストールが終了すると、以下の画面が表示されるので、'Finish'ボタンをクリックします。
+![RubyInstaller Install Finish](/images/windows_install/rubyinstaller_install_finish.png "rubyinstaller install finish")
+
+コマンドプロンプトが立ち上がってMSYS2のインストールに進みますのでデフォルトの選択肢(何も入力せずにエンター)を選びます。
+
+![RubyInstaller MSYS2 install](/images/windows_install/rubyinstaller_msys2_install.png "rubyinstaller msys2 install")
+
+コマンドプロンプトが立ち上がってMSYS2のインストールに進みますのでデフォルトの選択肢(何も入力せずにエンター)を選びます。
+
+MSYS2のインストール後、コマンドプロンプトが自動的に閉じるので、	Windowsスタートメニューからコマンドプロンプトを起動しておきましょう。
+
+### *2.* Railsのインストール
+
+{% highlight sh %}
+gem install rails --no-document
+{% endhighlight %}
+
+作業完了後に、以下のコマンドを実行してください。
+
+{% highlight sh %}
+rails -v
+{% endhighlight %}
+
+以下のように、インストールされたRailsのバージョンが表示されればOKです（バージョンの番号は違うかもしれません）。
+
+{% highlight sh %}
+Rails 5.2.3
+{% endhighlight %}
+
+もしもRailsのバージョンが5.2よりも小さい場合は 以下のコマンドを実行することでバージョンアップできます。
+
+{% highlight sh %}
+gem update rails --no-document
+{% endhighlight %}
+
+### *3.* コードを編集するためのテキストエディタが必要になります。
+
+このワークショップでは Atom エディタを推奨しています。
+
+* [Atom エディタをダウンロードしてインストールする](https://atom.io/)
+
+Windows Vista およびそれ以前のバージョンでは Atom エディタは非対応ですが、[Sublime Text エディタ](http://www.sublimetext.com/2) を利用可能です。(※Windows で Sublime Text を使う場合、日本語入力欄が入力箇所に出ない問題があります。気になる場合は以下の手順で日本語入力パッチ(修正プログラム)をインストールしてください。[Sublime Text 日本語入力パッチ](https://github.com/chikatoike/IMESupport/archive/master.zip)をダウンロードします。Sublime Text アプリメニューの Preferences から Browse Packeges を選び、フォルダを表示させます。 ダウンロードしたzipを解凍してできたフォルダ(IMESupport-master)をここへコピーします。Sublime Text が起動している場合は再起動します。)
+
+これで、Ruby on Railsのプログラミングを始められるまでの環境セットアップは終了です。おめでとう！
+
+### *4.* Install node
+
+これは厳密に言うと必要ではありませんが、 後で起こる可能性のある `ExecJS::RuntimeError` や `オブジェクトでサポートされていないプロパティまたはメソッドです` などの問題を回避してくれます。 ([参考 stackoverflow](https://stackoverflow.com/questions/12520456/execjsruntimeerror-on-windows-trying-to-follow-rubytutorial))
+
+* こちらのサイト [https://nodejs.org/](https://nodejs.org/) から、LTS版をダウンロードし、インストールします。
+* `Command Prompt with Ruby on Rails` をもう一度開いてください。
+
+node のバージョンをチェックしましょう。
+
+{% highlight sh %}
+node --version
+{% endhighlight %}
+
+バージョンが表示されればOKです。
+
+### *5.* 動作確認
+
+コーチの方に以下の方法で動作確認をしてもらってください。
+
+*コーチの方へ*:
+
+以下のコマンドでRailsが正しくインストールされているか確認してください。
+
+{% highlight sh %}
+rails new sample
+cd sample
+rails g scaffold book
+rails db:migrate
+rails server
+{% endhighlight %}
+
+ブラウザのURL欄に `http://localhost:3000/books` と入力して、画面が表示されれば成功です。
+
+作ったプロジェクトは削除しておきましょう。
+
+## 出るかもしれないエラー
+
+### Gem::RemoteFetcher エラー
+
+`rails new railsgirls` や `gem update rails` を実行すると下記のようなエラーが出るかもしれません:
+
+{% highlight sh %}
+Gem::RemoteFetcher::FetchError: SSL_connect returned=1 errno=0 state=SSLv3 read
+server certificate B: certificate verify failed (https://rubygems.org/gems/i18n-0.6.11.gem)
+{% endhighlight %}
+
+これは Rubygems のバージョンが古く、更新が必要であることを意味していますので、まず Rubygems のバージョンをチェックしましょう。
+
+{% highlight sh %}
+gem -v
+{% endhighlight %}
+
+もし `3.0.3` より古いバージョンだったら、以下の手順で更新する必要があります:
+
+[ruby-gems-update gem](https://rubygems.org/downloads/rubygems-update-3.0.3.gem) をダウンロードし、それを `c:\rubygems-update-3.0.3.gem` として保存して実行してください:
+
+{% highlight sh %}
+gem install --local c:\\rubygems-update-3.0.3.gem
+update_rubygems --no-document
+gem uninstall rubygems-update -x
+{% endhighlight %}
+
+Rubygems のバージョンをチェックしましょう。
+
+{% highlight sh %}
+gem -v
+{% endhighlight %}
+
+バージョンが `3.0.3` より大きいことを確かめてください。
+もし失敗していたらやり直してください。
+
+続いて、bundler gem も更新が必要となる場合があります。まず `bundle` のバージョンをチェックしましょう。
+
+{% highlight sh %}
+bundle -v
+{% endhighlight %}
+
+もし `1.17.2` より古いバージョンだったら、以下の手順で更新する必要があります:
+
+{% highlight sh %}
+gem update bundler --no-document
+{% endhighlight %}
+
+`bundle` のバージョンをチェックしましょう。
+
+{% highlight sh %}
+bundle -v
+{% endhighlight %}
+
+バージョンが `1.17.2` より大きいことを確かめてください。
+もし失敗していたらやり直してください。
+
+
+### 'x64_mingw' is not a valid platform エラー
+
+`rails server` を実行すると以下のようなエラーが出ることがあります:
+
+{% highlight sh %}
+'x64_mingw' is not a valid platform
+{% endhighlight %}
+
+もし RailsInstaller を実行した後でこのエラーが出たときには、`Gemfile` というファイルをちょっとだけ編集する必要があります:
+
+そのファイルの最後の方に下記のような行があるはずです。
+もしなければ付け加えましょう:
+
+{% highlight sh %}
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
+{% endhighlight %}
+
+このように `:x64_mingw` と書かれていたら、 `:x64_mingw` の部分を削除してください。
+つまり上の行を下記のように変更するわけです:
+
+{% highlight sh %}
+gem 'tzinfo-data', platforms: [:mingw, :mswin]
+{% endhighlight %}
+
+ファイルを編集し終わったら、再びコマンドプロンプトで `bundle update` を実行してみてください。
+
+<hr />
+
+## <a id="setup_for_linux">Linux 用セットアップ</a>
+
+### *1.* Install Rails
+
+あなたの Linux ディストリビューション(Ubuntu や Fedora)に Ruby on Rails を開発する環境をインストールするには下の1行をコピーしてターミナルに貼り付け、Enter キーを押す必要があります。スクリーンに流れるテキストを眺めて少しの時間の間、楽しみにお待ち下さい。次に進むまでの間、飲み物を飲んで休憩してはいかがでしょうか。
+
+#### Ubuntuの場合:
+
+{% highlight sh %}
+sudo apt-get install curl
+bash < <(curl -sL https://raw.github.com/railsgirls/installation-scripts/master/rails-install-ubuntu.sh)
+{% endhighlight %}
+
+gnome-terminal を使って RVM インストールを行いたいときは、Ruby と Rails の正しいバージョンを確かめる前にオプションを変更する必要があるかもしれません。
+[RVM documentation](http://rvm.io/integration/gnome-terminal) を参照してください。
+
+#### Fedoraの場合:
+
+{% highlight sh %}
+bash < <(curl -sL https://raw.github.com/railsgirls/installation-scripts/master/rails-install-fedora.sh)
+{% endhighlight %}
+
+下記のアプリケーション作成コマンドを実行して、正しくインストールされたことを確かめましょう。
+
+{% highlight sh %}
+rails new railsgirls
+cd railsgirls
+rails server
+{% endhighlight %}
+
+### *2.* コードを編集するためのテキストエディタが必要になります。
+
+このワークショップでは Sublime Text エディタを推奨しています。
+
+* [Sublime Text エディタをダウンロードしてインストールする](http://www.sublimetext.com/2)
+
+これで、Ruby on Railsのプログラミングを始められるまでの環境セットアップは終了です。おめでとう！
+
+<hr />
+
+## <a id="virtual-machine">仮想マシン</a>
+
+自分のコンピュータにインストールする代わりに仮想マシン上で開発環境をセットアップすることもできます。
+詳しいことは [ここ]({% post_url 2014-03-24-alternative-dev-environment %}) を参照してください。
+
+<hr />
+
+## <a id="using-a-cloud-service">クラウドサービスを利用する</a>
+
+あなたのコンピュータにRuby on Railsやエディタをインストールする代わりに、開発用のWebサービスを利用することもできます。ブラウザとネットへアクセスできる環境があればOKです。 ここでは [Cloud9](#using-a-cloud-service-c9) を利用する手順と[codenvy.io](#using-a-cloud-service-codenvy-io) を利用する手順を説明します。
+
+もしも、別のサービスを利用している場合は、例えば 'Workspace' の代わりに 'Workstation' という単語を使うなど用語の違いがあるかもしれませんが、概ね同じになっているはずです。
+
+### <a id="using-a-cloud-service-c9">Cloud9</a>
+
+[Cloud9のサイト](https://c9.io/)
+
+
+### *1.* ブラウザを確認する
+
+* Internet Explorer を利用している場合は、 [Google Chrome](https://www.google.com/intl/ja/chrome/browser/) または [Firefox](https://www.mozilla.org/ja/firefox/new/) をインストールしてください。（一部の機能がIEでは動かない場合があります。）
+
+### *2.* アカウントを作成する
+
+* コーチに登録用のメールアドレスを教えてRailsGirlsのチームに招待してもらいましょう。
+* 招待メールが送られてくるのでメールに記載されてあるURLをクリックします。
+* ユーザーネーム、アカウント名、パスワードを入力して、'Sign Up' ボタン からアカウントを作成できます。
+
+![](/images/cloud9/c9-railsgirls.png)
+
+### *3.* Ruby on Rails の開発用に Workspace を設定する
+
+* [Cloud9](https://c9.io/) の画面右上の Sign in をクリックし、作成したアカウントでログインします。(ログイン済みの方は画面右上のDASHBORDをクリック)
+* Create a new workspace をクリックします。
+* Workspace name には好きな名前をつけましょう。'Team' はRailsGirls Japanを選び 'Choose a template' では下段の右から2番目の 'blank' を選択して 'Create workspace' ボタンをクリックします。
+* 利用可能になるまで少し待ってください。
+
+### *4.* 標準でインストールされている RVM をアンインストールする
+
+#### *4.1.* RVM 関連ファイルの削除
+{% highlight sh %}
+/usr/bin/sudo rm -rf $HOME/.rvm $HOME/.rvmrc /etc/rvmrc /etc/profile.d/rvm.sh /usr/local/rvm /usr/local/bin/rvm
+/usr/bin/sudo /usr/sbin/groupdel rvm
+{% endhighlight %}
+
+#### *4.2.* RVM 関連設定の削除
+
+{% highlight sh %}
+sed -i -e '/rvm/d' ~/.bashrc
+{% endhighlight %}
+
+#### *4.3.* Cloud9 を再起動して操作を反映させる
+
+Cloud9を再起動して `$GEM_HOME`, `$GEM_PATH` を更新します。
+
+![](/images/cloud9/reboot-instance.png)
+
+これで RVM が正常にアンインストールされました。
+
+### *5.* rbenv を使って Ruby の version を最新にする
+
+"ruby -v" コマンドでRubyのバージョンを確認できます。
+最新の2.6.3では無い場合は2.6.3をインストールしましょう。
+
+{% highlight sh %}
+git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+echo 'PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile
+echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
+source ~/.bash_profile
+rbenv install 2.6.3
+rbenv global 2.6.3
+{% endhighlight %}
+
+### *6.* Bundlerのインストール
+
+{% highlight sh %}
+gem install bundler --no-document
+{% endhighlight %}
+
+### *7.* Railsのインストール
+
+{% highlight sh %}
+gem install rails --no-document
+{% endhighlight %}
+
+#### *8.* 開発する
+
+* 左側はフォルダとファイルを表示、選択できます。
+* 中央部はエディタです。ここでファイルを編集します。
+* 下部はターミナルです。ここでコマンドを実行します。
+* 必要なものは全てブラウザにあります。ブラウザのほかにエディタやターミナルを起動する必要はありません。
+* ガイドやチュートリアルを読む場合には、(Windowsマシンを利用している場合でも)Linux用のコマンドを使ってください。コマンドはクラウド上で実行され、その環境がLinuxマシンだからです。
+* ガイドやチュートリアルで、サーバを起動する時のコマンドは```rails server```ではなく```rails server -b 0.0.0.0```を実行してください。何も指定しなかった場合はコマンドを実行した環境以外からはアクセスできないため、操作しているマシンからも表示がうまく行えません。
+* ガイドやチュートリアルで、ブラウザから例えば http://localhost:3000 へアクセスする場合は、アドレス欄に入力するのではなく、画面上部から 'Preview' - 'Priview Running Application' を選ぶことで同じ操作ができます。
+* 例えば、 http://localhost:3000/posts へアクセスしたい場合は、'Preview' - 'Priview Running Application' を選んだあと、 '/posts' をアドレス欄の末尾に加えてください。
+
+
+<hr />
+
+### <a id="using-a-cloud-service-codenvy-io">codenvy.io</a>
+
+[codenvy.io のサイト](https://codenvy.io/)
+
+### *1.* アカウントを作成する
+
+ブラウザで [codenvy.io](https://codenvy.io) にアクセスして、無料でアカウントを作成することができます。
+
+![](/images/codenvy/create-account.png)
+
+### *2.* Ruby on Rails の開発用に Workspace を作成する
+
+Workspace を作成するには、[codenvy.io](https://codenvy.io) にログインして、 'Workspaces' をクリックします。'Add Workspace' を押します。
+
+![](/images/codenvy/create-workspace-dashboard.png)
+
+'New Workspace' の画面で以下のように設定します。
+
+* 'Name' は デフォルトの 'wksp-abc1' のような名前を使用します。
+* 'Team' は 'personal' が選択されています。
+* 'Select Stack' は、'Blank' を選択して下さい。
+* 'Ram' は、'dev-machine' が選択されています。
+* そして、'Create' ボタンを押すと workspace が作成させます。（作成が完了するまで、しばらく、時間がかかります。）
+
+![](/images/codenvy/create-workspace.png)
+
+* Codenvy は '/projects' というフォルダを作成します。ここにあなたが作成するコードを追加していきます。'Project Explorer' にて確認することができます。
+
+### *3.* Workspace の設定
+
+* 左側の 'Workspaces' をクリックします。
+* 作成した Workspace の列をクリックして、設定画面を表示します。
+* 'Servers' タブをクリックします。
+* 'Add Server' ボタンを押して、次の設定を追加します。
+  * 'Reference' 'rails-server'
+  * 'Port' '3000'
+  * 'Protocol' 'http'
+  * 'Add' を押します。
+* 下の方の 'Save' ボタンを押して Workspace を再起動します。
+
+![](/images/codenvy/workspace-server.png)
+
+再起動に表示されるアドレスをどこかに記録しておいて下さい。後で、使用します。
+
+![](/images/codenvy/server-tab.png)
+
+### *4.* Ruby と Ruby on Rails をインストールする。
+
+`Terminal` 内にて次のようにコマンドを入力して、Ruby と Ruby on Rails をインストールします。
+
+#### *4-0* 各種必要なプログラムのインストール
+
+{% highlight sh %}
+sudo apt-get update -y && sudo apt-get install -y build-essential bzip2 libsqlite3-dev libssl-dev libreadline-dev nodejs tzdata zlib1g-dev
+{% endhighlight %}
+
+インストールの途中、入力をする必要があります。以下のように入力して下さい。
+* `Geographic area: ` では `6` (`Asia`) を入力します。
+* `[More]` ではリターン（エンター）キーを押します。
+`[Time zone:]` では `78` (`Tokyo`) を入力します。
+
+#### *4-1* rbenv と ruby-build をインストール
+
+{% highlight sh %}
+git clone https://github.com/rbenv/rbenv.git ~/.rbenv
+git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+echo 'PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+source ~/.bashrc
+{% endhighlight %}
+
+#### *4-2* rbenv を使って Ruby をインストール
+
+{% highlight sh %}
+rbenv install 2.6.3
+{% endhighlight %}
+
+#### *4-3* デフォルトの Ruby を設定
+
+{% highlight sh %}
+rbenv global 2.6.3
+{% endhighlight %}
+
+#### *4-4* Bundler のインストール
+
+{% highlight sh %}
+gem install bundler --no-document
+{% endhighlight %}
+
+#### *4-5* Rails のインストール
+
+{% highlight sh %}
+gem install rails --no-document
+{% endhighlight %}
+
+### *5.* 動作確認
+
+{% highlight sh %}
+rails new sample
+cd sample
+bundle exec rails g scaffold book
+bundle exec rails db:migrate
+bundle exec rails server -b 0.0.0.0
+{% endhighlight %}
+
+### *6.* プロジェクトを作成する場合に
+* 左側の `Projects` タブでフォルダやファイルの操作をすることができます。
+* 中央のエディタでファイルの編集を行います。
+* 下側の `Terminal` タブでコマンドを実行します。`Run` メニューから新しい`Terminal`を開くことができます。
+* エディタやターミナルなど必要なプログラムがすべてブラウザの中で利用することができます。
+* ガイドやチュートリアルをやる場合は、たとえ Windows コンピュータを使っている場合でも、Linux向けのコマンドを参考にするようにして下さい。あなたが作成しているプロジェクトは、Linux が動作しているクラウド上のサーバーで動作しているからです。
+* ガイドやチュートリアルで `rails` や `rake` から始まる Rails 関連のコマンドは、はじめに `bundle exec` をつけてから実行するようにして下さい。`rails new` コマンドは例外です。
+* ガイドやチュートリアルで `rails server` や `rails s` を実行するように指示している場合は、`rails server -b 0.0.0.0` のように `-b 0.0.0.0` を後につけて下さい。
+* ガイドやチュートリアルが、`http://localhost:3000` にブラウザでアクセスするように指示している場合は、「Workspace の設定」で記録した `http://node1.codenvy.io:12345` のようなアドレス を使ってアクセスして下さい。例えば、チュートリアルが `http://localhost:3000/posts` にアクセスするように指示している場合は、`http://node1.codenvy.io:12345/posts` にアクセスして下さい。
