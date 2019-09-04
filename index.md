@@ -1,6 +1,17 @@
 # WayGarage Rails
 Way Garageに参加ください
 
+## パソコンの最低仕様
+###  mac
+2012年よりあと
+
+### windows
+Windows 7 以上
+ストレージ 128GB
+メモリ 4G
+CPU Intel core m3 m5 m7 i5 i7以上であること
+Intel celeronなどは動かない
+
 ## WayGarage Railsにようこそ!
 ### Basic
 [1.インストール、Ideaアプリを作ってみよう](/basic_1/)  
