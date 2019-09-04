@@ -43,51 +43,51 @@ Mac OS X 10.9 以上の場合は、Homebrew と rbenv を使って環境をつ�
 
 #### 3-1. Command line tools をターミナルからインストール:
 
-{% highlight sh %}
+```
 xcode-select --install
-{% endhighlight %}
+```
 
 #### 3-2. [Homebrew](http://brew.sh/)をインストール:
 
-{% highlight sh %}
+```
 ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-{% endhighlight %}
+```
 
 #### 3-3. [rbenv](https://github.com/rbenv/rbenv)をインストール:
 
-{% highlight sh %}
+```
 brew update
 brew install rbenv
 echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
 source ~/.bash_profile
-{% endhighlight %}
+```
 
 #### 3-4. rbenvを使ってRubyをインストール:
 
 "rbenv install -l" コマンドでrbenvでインストール可能なRubyのバージョンを確認できます。
 
-{% highlight sh %}
+```
 rbenv install 2.6.3
-{% endhighlight %}
+```
 
 ※もしも "OpenSSL::SSL::SSLError: ... : certificate verify failed" エラーが起きた場合は、以下の手順を試してみてください。
 
-{% highlight sh %}
+```
 brew install curl-ca-bundle
 cp /usr/local/opt/curl-ca-bundle/share/ca-bundle.crt `ruby -ropenssl -e 'puts OpenSSL::X509::DEFAULT_CERT_FILE'`
-{% endhighlight %}
+```
 
 #### 3-5. デフォルトのRuby を設定:
 
-{% highlight sh %}
+```
 rbenv global 2.6.3
-{% endhighlight %}
+```
 
 #### 3-6. Railsのインストール:
 
-{% highlight sh %}
+```
 gem install rails --no-document
-{% endhighlight %}
+```
 
 ### *4.* コードを編集するのに必要なテキストエディタをインストールする。
 
@@ -105,13 +105,13 @@ Mac OS X 10.7 およびそれ以前のバージョンでは、 Atom エディタ
 
 以下のコマンドでRailsが正しくインストールされているか確認してください。
 
-{% highlight sh %}
+```
 rails new sample
 cd sample
 rails g scaffold book
 rails db:migrate
 rails server
-{% endhighlight %}
+```
 
 ブラウザのURL欄に `http://localhost:3000/books` と入力して、画面が表示されれば成功です。
 
@@ -145,40 +145,40 @@ To paste a text in the command prompt window you'll need to use the mouse (right
 
 In the `Command Prompt with Ruby and Rails`, run the following command:
 
-{% highlight sh %}
+```
 rails -v
-{% endhighlight %}
+```
 
 If you see the following message:
 
-{% highlight sh %}
+```
 the system cannot find the path specified
-{% endhighlight %}
+```
 
 This can happen when the installer cannot correctly setup the paths required to run rails.
 It's nothing serious, we can fix this in different ways but the easiest is by manually installing the rails gem with the following command:
 
-{% highlight sh %}
+```
 gem install rails bundler --no-document
-{% endhighlight %}
+```
 
 This will (re)install rails correctly and running:
 
-{% highlight sh %}
+```
 rails -v
-{% endhighlight %}
+```
 
 Should print the currently installed rails version number (your version may differ):
 
-{% highlight sh %}
+```
 Rails 5.1.1
-{% endhighlight %}
+```
 
 If the Rails version is less than 5.1, update it using a following command:
 
-{% highlight sh %}
+```
 gem update rails --no-document
-{% endhighlight %}
+```
 
 ## Possible errors
 
@@ -186,38 +186,38 @@ gem update rails --no-document
 
 If you get this error when running `rails new railsgirls` or `gem update rails`:
 
-{% highlight sh %}
+```
 Gem::RemoteFetcher::FetchError: SSL_connect returned=1 errno=0 state=SSLv3 read
 server certificate B: certificate verify failed (https://rubygems.org/gems/i18n-0.6.11.gem)
-{% endhighlight %}
+```
 
 This means you have an older version of Rubygems and will need to update it manually first verify your Rubygems version
 
-{% highlight sh %}
+```
 gem -v
-{% endhighlight %}
+```
 
 If it is lower than `2.6.5` you will need to manually update it:
 
 First download the [ruby-gems-update gem](https://rubygems.org/gems/rubygems-update-2.6.11.gem). Move the file to `c:\\rubygems-update-2.6.11.gem` then run:
 
-{% highlight sh %}
+```
 gem install --local c:\\rubygems-update-2.6.11.gem
-{% endhighlight %}
+```
 
-{% highlight sh %}
+```
 update_rubygems --no-document
-{% endhighlight %}
+```
 
-{% highlight sh %}
+```
 gem uninstall rubygems-update -x
-{% endhighlight %}
+```
 
 Check your version of rubygems
 
-{% highlight sh %}
+```
 gem -v
-{% endhighlight %}
+```
 
 Make sure it is equal or higher than `2.6.11`. Re-run the command that was failing previously.
 
@@ -258,9 +258,9 @@ If you are using Windows Vista or older versions, you can use another editor [Su
 
 Check your version of node
 
-{% highlight sh %}
+```
 node --version
-{% endhighlight %}
+```
 
 Make sure it is displaying version number.
 
@@ -268,20 +268,21 @@ Make sure it is displaying version number.
 
 Check that everything is working by running the application generator command.
 
-{% highlight sh %}
+```
 rails new myapp
-{% endhighlight %}
+```
 
-{% highlight sh %}
+```
 cd myapp
-{% endhighlight %}
+```
 
-{% highlight sh %}
+```
 rails server
-{% endhighlight %}
+```
 
 Go to `http://localhost:3000` in your browser, and you should see the 'Yay! You're on Rails!' page.
 
 Now you should have a working Ruby on Rails programming setup. Congrats!
 
 **Coach:** We recommend to verify by using the scaffold command and inputting data with the generated page with coaches to ensure everything is working. Also: remove the test app `myapp` to make super sure no-one is working in the wrong folder, following the steps of the workshop.
+
